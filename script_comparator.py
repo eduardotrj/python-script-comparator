@@ -42,6 +42,53 @@ class ScriptComparator:
                                font=("Arial", 16, "bold"))
         title_label.grid(row=0, column=0, columnspan=2, pady=(0, 20))
 
+        self.style_button = ttk.Button(main_frame, text="🎨Style",
+                                       command=self.change_style_window, style="Accent.TButton")
+        self.style_button.grid(row=0, column=1, padx=(0, 2))
+
+        # Configure main frame style
+        # main_frame.configure(style="TFrame")
+        # main_frame.tk_setPalette(background="#F0F0F0")
+        # main_frame.tk_setPalette(foreground="#333333")
+        # main_frame.tk_setPalette(highlightBackground="#F0F0F0")
+        # main_frame.tk_setPalette(highlightColor="#0078D4")
+        # main_frame.tk_setPalette(activeBackground="#0078D4")
+        # main_frame.tk_setPalette(activeForeground="white")
+        # main_frame.tk_setPalette(selectBackground="#0078D4")
+        # main_frame.tk_setPalette(selectForeground="white")
+        # main_frame.tk_setPalette(buttonBackground="#0078D4")
+        # main_frame.tk_setPalette(buttonForeground="white")
+        # main_frame.tk_setPalette(buttonActiveBackground="#005A9E")
+        # main_frame.tk_setPalette(buttonActiveForeground="white")
+        # main_frame.tk_setPalette(textBackground="#FFFFFF")
+        # main_frame.tk_setPalette(textForeground="#333333")
+        # main_frame.tk_setPalette(scrollbarBackground="#F0F0F0")
+        # main_frame.tk_setPalette(scrollbarForeground="#333333")
+        # main_frame.tk_setPalette(scrollbarActiveBackground="#0078D4")
+        # main_frame.tk_setPalette(scrollbarActiveForeground="white")
+        # main_frame.tk_setPalette(entryBackground="#FFFFFF")
+        # main_frame.tk_setPalette(entryForeground="#333333")
+        # main_frame.tk_setPalette(entryActiveBackground="#0078D4")
+        # main_frame.tk_setPalette(entryActiveForeground="white")
+
+
+        # Configure grid layout
+
+        # Style for buttons
+        # style = ttk.Style()
+        # style.configure("Accent.TButton", foreground="white", background="#0078D4",
+        #                 font=("Arial", 10, "bold"))
+        # style.map("Accent.TButton", background=[('active', '#005A9E')])
+        # style.configure("TLabelFrame", font=("Arial", 12, "bold"))
+        # style.configure("TLabel", font=("Arial", 10))
+        # style.configure("TButton", font=("Arial", 10))
+        # style.configure("TFrame", background="#F0F0F0")
+        # style.configure("TScrolledText", font=("Consolas", 10))
+        # style.configure("TEntry", font=("Arial", 10))
+        # style.configure("TCombobox", font=("Arial", 10))
+
+
+
         # Code input section
         self.create_code_input_section(main_frame)
 
@@ -364,6 +411,55 @@ print(f"Set: {my_set}")'''
             self.result2_text.delete(1.0, tk.END)
             self.result2_text.insert(tk.END, result_text)
             self.result2_text.config(state=tk.DISABLED)
+
+    def change_style_window(self):
+        """Open a new window to change the style of the application."""
+        style_window = tk.Toplevel(self.root)
+        style_window.title("Change Style")
+        style_window.geometry("400x300")
+
+        # Style options
+        style_label = ttk.Label(style_window, text="Select Style:", font=("Arial", 12))
+        style_label.pack(pady=10)
+
+
+        styles = ttk.Style().theme_names()
+        self.style_combobox = ttk.Combobox(style_window, values=styles, state='readonly')
+        self.style_combobox.set(ttk.Style().theme_use())
+        self.style_combobox.pack(pady=10)
+
+        # Color options
+        color_label = ttk.Label(style_window, text="Select Color Scheme:", font=("Arial", 12))
+        color_label.pack(pady=10)
+
+        self.color_combobox = ttk.Combobox(style_window, values=["Light", "Dark"], state='readonly')
+        self.color_combobox.set("Light")
+        self.color_combobox.pack(pady=10)
+        # Apply button
+        apply_label = ttk.Label(style_window, text="Click 'Apply Style' to change the style.", font=("Arial", 10))
+        apply_label.pack(pady=10)
+        apply_button = ttk.Button(style_window, text="Apply Style",
+                                 command=self.apply_style)
+        apply_button.pack(pady=10)
+
+
+
+    def apply_style(self):
+        """Apply the selected style to the application."""
+        selected_style = self.style_combobox.get()
+        if selected_style:
+            ttk.Style().theme_use(selected_style)
+            messagebox.showinfo("Style Changed", f"Style changed to '{selected_style}'")
+                # Apply color scheme
+            selected_color = self.color_combobox.get()
+            if selected_color == "Light":
+                self.root.tk_setPalette(background="#F0F0F0", foreground="#333333")
+            elif selected_color == "Dark":
+                self.root.tk_setPalette(background="#333333", foreground="#F0F0F0")
+
+        else:
+            messagebox.showwarning("No Style Selected", "Please select a style to apply.")
+
 
 def main():
     root = tk.Tk()
